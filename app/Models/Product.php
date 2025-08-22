@@ -65,12 +65,23 @@ class Product extends Model
             'products.description',
             'products.stock',
             'products.discount',
-            'product_variants.variant',
-            'product_variants.price'
+      
         ])
+        ->distinct()
         ->join('product_images', 'product_images.product_id', '=', 'products.id')
         ->join('image', 'product_images.image_id', '=', 'image.id')
-        ->join('product_variants','product_variants.product_id', '=', 'products.id')
+        ->where('products.id' , '=', $id)
+        ->get();
+ }
+
+
+ public static function detailVariantProduct($id) {
+     return self::select([
+           'product_variants.variant',
+           'product_variants.price',
+           'product_variants.id'
+        ])
+        ->join('product_variants', 'product_variants.product_id', '=', 'products.id')
         ->where('products.id' , '=', $id)
         ->get();
  }
