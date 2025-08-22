@@ -21,7 +21,7 @@ class HomeController extends Controller
     public function details($id) {
 
         $product = Product::detailsProduct($id);
-        // dd(json_encode($product));
-        return view('product.product-details', ['details' => $product]);
+        $variants = Product::detailVariantProduct($id);
+        return view('product.product-details', ['details' => $product, 'variants' => $variants]);
     }
 }

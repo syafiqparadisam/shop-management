@@ -58,8 +58,11 @@
 						class="zoomable-image object-cover h-full w-full transition-transform duration-300 ease-out bg-repeat bg-contain" />
 				</div>
 				<!-- small Thumbnails-->
-				<div id="thumbnailContainer" class="flex flex-wrap gap-1 justify-between">
-					${imagesContainer.join("")}
+				<div id="thumbnailContainer" class="flex w-full flex-wrap gap-1 justify-between">
+					@foreach ($details as $detail)
+						<img src="{{ $detail->image_path }}" alt="Thumbnail ${i}"
+							class="w-24 h-24 cursor-pointer rounded-md shadow-md" data-index="{{$detail->id}}">
+					@endforeach
 				</div>
 			</div>
 
@@ -114,7 +117,9 @@
 				<div>
 					<label for="variantSelect">Varian Produk:</label>
 					<select id="variantSelect" class="w-full p-2 bg-white border border-gray-300 rounded">
-						${VariantsContainer.join("")}
+						@foreach ($variants as $variant)
+							<option class="w-full p-2 bg-white rounded-md">{{$variant->variant}}</option>
+						@endforeach
 					</select>
 				</div>
 				<div class="flex items-center my-3 flex-wrap space-x-2">
@@ -162,3 +167,85 @@
 		</div>
 	</div>
 @endsection
+
+<script>
+
+	const currentImage = document.getElementById("currentImage");
+
+	currentImage.addEventListener("mousemove", function (e) {
+		const rect = currentImage.getBoundingClientRect();
+		const x = ((e.clientX - rect.left) / rect.width) * 100;
+		const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+		currentImage.style.transformOrigin = `${x}% ${y}%`;
+		currentImage.style.transform = "scale(1.5)";
+	});
+
+	currentImage.addEventListener("mouseleave", function () {
+		currentImage.style.transformOrigin = "center";
+		currentImage.style.transform = "scale(1)";
+	});
+
+
+	function updateSubtotal(price) {
+		const quantity = parseInt(document.getElementById("quantityInput").value);
+
+		const subtotal = price * quantity;
+
+		// Format the subtotal
+		let formattedSubtotal = subtotal
+			.toLocaleString("id-ID", {
+				minimumFractionDigits: 0,
+				maximumFractionDigits: 0,
+			})
+			.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+		formattedSubtotal += ",00";
+		// Update the subtotal element
+		document.getElementById(
+			"subtotalPrice"
+		).textContent = `Rp ${formattedSubtotal}`;
+	}
+
+	function increaseQuantity() {
+		const quantityInput = document.getElementById("quantityInput");
+		let quantity = parseInt(quantityInput.value);
+		quantity += 1;
+		quantityInput.value = quantity;
+		const price = parseRupiahToInteger();
+		updateSubtotal(price);
+	}
+
+
+	function decreaseQuantity() {
+		const quantityInput = document.getElementById("quantityInput");
+		let quantity = parseInt(quantityInput.value);
+		if (quantity > 1) {
+			quantity -= 1;
+			quantityInput.value = quantity;
+			const price = parseRupiahToInteger();
+			updateSubtotal(price);
+		}
+	}
+
+	function changeImage(imageSrc, imageNumber) {
+		document.getElementById("currentImage").src = imageSrc;
+
+		let thumbnails = document.querySelectorAll(".thumbnails");
+
+		thumbnails.forEach((thumbnail, index) => {
+			// Apply a red border around the entire thumbnail if selected
+			thumbnail.style.borderBottom =
+				index === imageNumber ? "3px solid red" : "none";
+		});
+	}
+
+	function updateBadgeValue() {
+		let storedValue = parseInt(sessionStorage.getItem("cartBadgeValue"));
+		let increment = storedValue + 1;
+		sessionStorage.setItem("cartBadgeValue", increment.toString());
+		$("#badgeRound").removeClass("hidden");
+		$("#notification").text(increment);
+	}
+
+</script>
