@@ -134,7 +134,7 @@
 					<!-- Buy Button -->
 					<div class="space-y-2">
 						<button onclick="goWhatsapp()" class="w-full bg-slate-700 text-white py-2 rounded"
-							id="BuyButton">Beli</button>
+							id="BuyButton">Pesan</button>
 					</div>
 			</div>
 		</div>

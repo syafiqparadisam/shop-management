@@ -38,15 +38,8 @@
             <x-bi-search class="hover:cursor-pointer m-auto mx-2" />
         </div>
       </div>
-
-      <!-- Login,Cart,Register Button -->
-      <div class="right-0 items-center m-2 gap-3 md:flex">
-       
-        <div class="md:flex items-center justify-center gap-3 hidden">
-          <a href="/login" class="rounded-md border-2 border-black px-4 py-2 font-bold">Login</a>
-          <a href="/register" class="bg-black text-white px-4 py-2 rounded-md font-bold border-2 ">Register</a>
-        </div>
-      </div>
+      
+    
     </div>
 
   </div>
